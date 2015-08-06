@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date        = Date.today.to_s
   s.platform = Gem::Platform::RUBY
   s.extra_rdoc_files = ['README.md', 'LICENSE']
-  s.summary     = 'open source project repository management'
+  s.summary     = 'open source project github repo reporting'
   s.description = s.summary
   s.authors     = ['Tim Smith']
   s.email       = 'tsmith84@gmail.com'

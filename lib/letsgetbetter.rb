@@ -28,8 +28,7 @@ module LetsGetBetter
 
   # main method used to kick off the run
   def self::run
-    @options = Config.config
-    puts "\nletsgetbetter - open source project repository management"
+    puts "\nletsgetbetter - open source project github repo reporting"
     puts "---------------------------------------------------------\n\n"
 
     Reporter.run
