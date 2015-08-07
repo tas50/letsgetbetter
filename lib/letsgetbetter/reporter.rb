@@ -19,13 +19,27 @@
 module LetsGetBetter
   # Presents the github org state
   class Reporter
-    def self.run
-      parse_repos.each do |k, v|
-        puts "#{k}: #{v['issues']} open issues"
+    include CommandLineReporter
+    def run
+      header title: "#{Config.config['config']['github']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
+      table border: true do
+        row header: true, color: 'red'  do
+          column 'Repo Name', width: 30, align: 'center', color: 'blue'
+          column 'Issues', width: 15
+          column 'Pull Requests', width: 15
+        end
+
+        parse_repos.each do |k, v|
+          row color: 'green', bold: true do
+            column "#{k}"
+            column "#{v['issues']}"
+            column '-'
+          end
+        end
       end
     end
 
-    def self.parse_repos
+    def parse_repos
       repo_results = {}
       Github.repos.each do |repo|
         repo_results[repo[:name]] = {}

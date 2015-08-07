@@ -24,7 +24,7 @@ module LetsGetBetter
     end
 
     def self.open_connection
-      connection = Octokit::Client.new(:access_token => Config.config['config']['github']['token'])
+      connection = Octokit::Client.new(access_token: Config.config['config']['github']['token'])
       connection.auto_paginate = true
       connection
     end

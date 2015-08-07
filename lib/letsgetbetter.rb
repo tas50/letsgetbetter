@@ -18,6 +18,7 @@
 
 # main orchestrator of letsgetbetter runs
 module LetsGetBetter
+  require 'command_line_reporter'
   require 'letsgetbetter/config.rb'
   require 'letsgetbetter/github.rb'
   require 'letsgetbetter/reporter.rb'
@@ -28,9 +29,6 @@ module LetsGetBetter
 
   # main method used to kick off the run
   def self::run
-    puts "\nletsgetbetter - open source project github repo reporting"
-    puts "---------------------------------------------------------\n\n"
-
-    Reporter.run
+    Reporter.new.run
   end
 end
