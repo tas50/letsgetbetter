@@ -30,7 +30,7 @@ module LetsGetBetter
     end
 
     def self.repos
-      gh_connection.organization_repositories(Config.config['config']['github']['org'])
+      gh_connection.organization_repositories(Config.config['options']['org'])
     end
   end
 end

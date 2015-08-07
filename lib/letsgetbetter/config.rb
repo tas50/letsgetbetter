@@ -49,16 +49,27 @@ module LetsGetBetter
       banner = "Lets Get Better - Help with managing open source projects in large Github Repos\n\n" \
                 "Usage: letsgetbetter [options]\n\n" \
                 "  Options:\n"
-      OptionParser.new do |opts|
+      optparse = OptionParser.new do |opts|
         opts.banner = banner
         opts.on('-c', '--config config.yml', String, 'Use the specified config file (defaults to ./config.yml)') do |c|
           options['config_file'] = c
+        end
+        opts.on('-o', '--org config.yml', String, 'Organization to analyze (required)') do |o|
+          options['org'] = o
         end
         opts.on('-h', '--help', 'Displays Help') do
           puts opts
           exit
         end
-      end.parse!(ARGV)
+      end
+
+      optparse.parse!
+
+      # make sure the org val is passed
+      if options['org'].nil?
+        puts optparse
+        exit!
+      end
 
       options
     end
