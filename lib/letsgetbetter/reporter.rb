@@ -45,7 +45,7 @@ module LetsGetBetter
         repo_results[repo[:name]] = {}
         repo_results[repo[:name]] = { 'issues' => repo[:open_issues_count] }
       end
-      repo_results
+      repo_results.sort_by { |_k, v| -v['issues'] }
     end
   end
 end
