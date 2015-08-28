@@ -25,16 +25,16 @@ module LetsGetBetter
       table border: true do
         row header: true, color: 'red' do
           column 'Repo Name', width: 30, align: 'center', color: 'blue'
-          column 'Issues', width: 15
-          column 'Pull Requests', width: 15
+          column 'Open PRs', width: 10
+          column 'Issues', width: 10
           column 'Watchers', width: 10
         end
 
         parse_repos.each do |k, v|
           row color: 'green', bold: true do
             column "#{k}"
+            column "#{v['pull_requests']}"
             column "#{v['issues']}"
-            column '-'
             column "#{v['watchers']}"
           end
         end
@@ -45,10 +45,11 @@ module LetsGetBetter
       repo_results = {}
       Github.repos.each do |repo|
         repo_results[repo[:name]] = {}
-        repo_results[repo[:name]]['issues'] = repo[:open_issues_count]
+        repo_results[repo[:name]]['pull_requests'] = Github.pull_requests(repo[:name])
+        repo_results[repo[:name]]['issues'] = repo[:open_issues_count] - repo_results[repo[:name]]['pull_requests']
         repo_results[repo[:name]]['watchers'] = Github.watchers(repo[:name])
       end
-      repo_results.sort_by { |_k, v| -v['issues'] }
+      repo_results.sort_by { |_k, v| -v['pull_requests'] }
     end
   end
 end

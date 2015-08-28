@@ -36,5 +36,9 @@ module LetsGetBetter
     def self.watchers(repo_name)
       gh_connection.watchers("#{Config.config['options']['org']}/#{repo_name}").count
     end
+
+    def self.pull_requests(repo_name)
+      gh_connection.pull_requests("#{Config.config['options']['org']}/#{repo_name}").count
+    end
   end
 end
