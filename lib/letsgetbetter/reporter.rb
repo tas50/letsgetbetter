@@ -23,10 +23,11 @@ module LetsGetBetter
     def run
       header title: "#{Config.config['config']['github']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
       table border: true do
-        row header: true, color: 'red'  do
+        row header: true, color: 'red' do
           column 'Repo Name', width: 30, align: 'center', color: 'blue'
           column 'Issues', width: 15
           column 'Pull Requests', width: 15
+          column 'Watchers', width: 10
         end
 
         parse_repos.each do |k, v|
@@ -34,6 +35,7 @@ module LetsGetBetter
             column "#{k}"
             column "#{v['issues']}"
             column '-'
+            column "#{v['watchers']}"
           end
         end
       end
@@ -43,7 +45,8 @@ module LetsGetBetter
       repo_results = {}
       Github.repos.each do |repo|
         repo_results[repo[:name]] = {}
-        repo_results[repo[:name]] = { 'issues' => repo[:open_issues_count] }
+        repo_results[repo[:name]]['issues'] = repo[:open_issues_count]
+        repo_results[repo[:name]]['watchers'] = Github.watchers(repo[:name])
       end
       repo_results.sort_by { |_k, v| -v['issues'] }
     end
