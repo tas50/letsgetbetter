@@ -30,7 +30,7 @@ module LetsGetBetter
     end
 
     def self.repos
-      gh_connection.organization_repositories(Config.config['options']['org'])
+      gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public')
     end
 
     def self.watchers(repo_name)
