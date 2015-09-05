@@ -30,7 +30,8 @@ module LetsGetBetter
           column 'Watchers', width: 10
         end
 
-        parse_repos.each do |k, v|
+        repos = parse_repos
+        repos['repos'].each do |k, v|
           row color: 'green', bold: true do
             column "#{k}"
             column "#{v['pull_requests']}"
@@ -39,17 +40,39 @@ module LetsGetBetter
           end
         end
       end
+
+      puts "Totals:"
+      puts "Repos: #{repos['repos'].count}"
+      puts "Pull requests: #{repos['total']['pull_requests']}"
+      puts "Issues: #{repos['total']['issues']}"
+      puts "Watchers: #{repos['total']['watchers']}"
     end
 
     def parse_repos
       repo_results = {}
-      Github.repos.each do |repo|
-        repo_results[repo[:name]] = {}
-        repo_results[repo[:name]]['pull_requests'] = Github.pull_requests(repo[:name])
-        repo_results[repo[:name]]['issues'] = repo[:open_issues_count] - repo_results[repo[:name]]['pull_requests']
-        repo_results[repo[:name]]['watchers'] = Github.watchers(repo[:name])
+      repo_results['repos'] = {}
+      repo_results['total'] = {}
+      %w(pull_requests issues watchers).each do |item|
+        repo_results['total'][item] = 0
       end
-      repo_results.sort_by { |_k, v| -v['pull_requests'] }
+
+      Github.repos.each do |repo|
+        repo_results['repos'][repo[:name]] = {}
+
+        prs = Github.pull_requests(repo[:name])
+        repo_results['repos'][repo[:name]]['pull_requests'] = prs
+        repo_results['total']['pull_requests'] += prs
+
+        issues = repo[:open_issues_count] - repo_results['repos'][repo[:name]]['pull_requests']
+        repo_results['repos'][repo[:name]]['issues'] = issues
+        repo_results['total']['issues'] += issues
+
+        watchers = Github.watchers(repo[:name])
+        repo_results['repos'][repo[:name]]['watchers'] = watchers
+        repo_results['total']['watchers'] += watchers
+      end
+      repo_results['repos'].sort_by { |_k, v| -v['pull_requests'] }
+      repo_results
     end
   end
 end
