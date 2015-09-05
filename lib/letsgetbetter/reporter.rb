@@ -21,7 +21,7 @@ module LetsGetBetter
   class Reporter
     include CommandLineReporter
     def run
-      header title: "#{Config.config['config']['github']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
+      header title: "#{Config.config['options']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
       table border: true do
         row header: true, color: 'red' do
           column 'Repo Name', width: 30, align: 'center', color: 'blue'
@@ -39,13 +39,14 @@ module LetsGetBetter
             column "#{v['watchers']}"
           end
         end
-      end
 
       puts "Totals:"
       puts "Repos: #{repos['repos'].count}"
       puts "Pull requests: #{repos['total']['pull_requests']}"
       puts "Issues: #{repos['total']['issues']}"
-      puts "Watchers: #{repos['total']['watchers']}"
+      puts "Watchers: #{repos['total']['watchers']}\n"
+      end
+
     end
 
     def parse_repos
@@ -71,7 +72,7 @@ module LetsGetBetter
         repo_results['repos'][repo[:name]]['watchers'] = watchers
         repo_results['total']['watchers'] += watchers
       end
-      repo_results['repos'].sort_by { |_k, v| -v['pull_requests'] }
+      repo_results['repos'] = repo_results['repos'].sort_by { |_k, v| -v['pull_requests'] }
       repo_results
     end
   end
