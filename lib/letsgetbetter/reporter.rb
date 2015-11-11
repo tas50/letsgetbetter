@@ -44,8 +44,8 @@ module LetsGetBetter
 
         puts 'Totals:'
         puts "Repos: #{repos.count}"
-        puts "Pull requests: na"
-        puts "Issues: na"
+        puts 'Pull requests: na'
+        puts 'Issues: na'
         puts "Watchers: na\n"
       end
     end

@@ -16,3 +16,5 @@ PerceivedComplexity:
 CyclomaticComplexity:
   Enabled: false
 
+Lint/UselessAccessModifier:
+  Enabled: false
