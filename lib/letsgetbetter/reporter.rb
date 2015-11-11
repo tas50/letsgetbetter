@@ -28,52 +28,26 @@ module LetsGetBetter
           column 'Open PRs', width: 10
           column 'Issues', width: 10
           column 'Watchers', width: 10
+          column 'Forks', width: 10
         end
 
-        repos = parse_repos
-        repos['repos'].each do |k, v|
+        repos = LetsGetBetter::Github.repos_details
+        repos.each do |repo, data|
           row color: 'green', bold: true do
-            column "#{k}"
-            column "#{v['pull_requests']}"
-            column "#{v['issues']}"
-            column "#{v['watchers']}"
+            column "#{repo}"
+            column "#{data['pr_count']}"
+            column "#{data['issue_count']}"
+            column "#{data['watcher_count']}"
+            column "#{data['fork_count']}"
           end
         end
 
-      puts "Totals:"
-      puts "Repos: #{repos['repos'].count}"
-      puts "Pull requests: #{repos['total']['pull_requests']}"
-      puts "Issues: #{repos['total']['issues']}"
-      puts "Watchers: #{repos['total']['watchers']}\n"
+        puts 'Totals:'
+        puts "Repos: #{repos.count}"
+        puts "Pull requests: na"
+        puts "Issues: na"
+        puts "Watchers: na\n"
       end
-
-    end
-
-    def parse_repos
-      repo_results = {}
-      repo_results['repos'] = {}
-      repo_results['total'] = {}
-      %w(pull_requests issues watchers).each do |item|
-        repo_results['total'][item] = 0
-      end
-
-      Github.repos.each do |repo|
-        repo_results['repos'][repo[:name]] = {}
-
-        prs = Github.pull_requests(repo[:name])
-        repo_results['repos'][repo[:name]]['pull_requests'] = prs
-        repo_results['total']['pull_requests'] += prs
-
-        issues = repo[:open_issues_count] - repo_results['repos'][repo[:name]]['pull_requests']
-        repo_results['repos'][repo[:name]]['issues'] = issues
-        repo_results['total']['issues'] += issues
-
-        watchers = Github.watchers(repo[:name])
-        repo_results['repos'][repo[:name]]['watchers'] = watchers
-        repo_results['total']['watchers'] += watchers
-      end
-      repo_results['repos'] = repo_results['repos'].sort_by { |_k, v| -v['pull_requests'] }
-      repo_results
     end
   end
 end

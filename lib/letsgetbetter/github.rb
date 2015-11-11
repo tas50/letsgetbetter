@@ -19,26 +19,41 @@
 module LetsGetBetter
   # Fetches the Github org state
   class Github
+    # return a hash of the repos with details for each
+    def self.repos_details
+      if @repo_details
+        @repo_details
+      else
+        @repo_details = {}
+        repos.each do |repo|
+          details = {}
+          repo_data = gh_connection.repository("#{Config.config['options']['org']}/#{repo}")
+          details['watcher_count'] = repo_data[:watchers_count]
+          details['fork_count'] = repo_data[:forks_count]
+          details['pr_count'] = 0
+          details['issue_count'] = 0
+          @repo_details[repo] = details
+        end
+        @repo_details
+      end
+    end
+
+    private
+
+    # return the connection or set a new one up
     def self.gh_connection
-      @connection ||= open_connection
+      if @connection
+        @connection
+      else
+        @connection = Octokit::Client.new(access_token: Config.config['config']['github']['token'])
+        @connection.auto_paginate = true
+        @connection
+      end
     end
 
-    def self.open_connection
-      connection = Octokit::Client.new(access_token: Config.config['config']['github']['token'])
-      connection.auto_paginate = true
-      connection
-    end
-
+    # return an array of the repos
     def self.repos
-      gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public')
-    end
-
-    def self.watchers(repo_name)
-      gh_connection.watchers("#{Config.config['options']['org']}/#{repo_name}").count
-    end
-
-    def self.pull_requests(repo_name)
-      gh_connection.pull_requests("#{Config.config['options']['org']}/#{repo_name}").count
+      @repos ||= gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public').collect { |x| x[:name] }
     end
   end
 end
