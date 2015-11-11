@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://www.github.com/tas50/letsgetbetter'
   s.license     = 'Apache-2.0'
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
   s.add_dependency 'octokit', '~> 4.0'
   s.add_dependency 'command_line_reporter'
   s.add_development_dependency 'rake', '~> 10.0'
