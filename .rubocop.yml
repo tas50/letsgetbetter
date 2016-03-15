@@ -18,3 +18,6 @@ CyclomaticComplexity:
 
 Lint/UselessAccessModifier:
   Enabled: false
+
+Style/UnneededInterpolation:
+  Enabled: false # creates ever worse code on autocorrect
