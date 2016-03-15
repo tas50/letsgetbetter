@@ -42,13 +42,11 @@ module LetsGetBetter
 
     # return the connection or set a new one up
     def self.gh_connection
-      if @connection
-        @connection
-      else
+      unless @connection
         @connection = Octokit::Client.new(access_token: Config.config['config']['github']['token'])
         @connection.auto_paginate = true
-        @connection
       end
+      @connection
     end
 
     # return an array of the repos
