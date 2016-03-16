@@ -20,33 +20,49 @@ module LetsGetBetter
   # Presents the github org state
   class Reporter
     include CommandLineReporter
+
+    # return array of issues and array of PRs for the passed repo
+    def repo_issues_and_prs(repo = nil)
+      issues = []
+      prs = []
+      LetsGetBetter::Github.issues.each do |_id, issue_data|
+        next unless issue_data['repository'] == repo || repo.nil?
+        # sort based on the identified type
+        if issue_data['is_pr']
+          prs << issue_data
+        else
+          issues << issue_data
+        end
+      end
+      [issues, prs]
+    end
+
     def run
       header title: "#{Config.config['options']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
       table border: true do
         row header: true, color: 'red' do
-          column 'Repo Name', width: 30, align: 'center', color: 'blue'
+          column 'Repo Name', width: 40, align: 'center', color: 'blue'
           column 'Open PRs', width: 10
           column 'Issues', width: 10
-          column 'Watchers', width: 10
-          column 'Forks', width: 10
+          column 'Oldest PR', width: 10
+          column 'Newest PR', width: 10
         end
 
-        repos = LetsGetBetter::Github.repos_details
-        repos.each do |repo, data|
+        LetsGetBetter::Github.repos.each do |repo|
+          issues, prs = repo_issues_and_prs(repo)
+
           row color: 'green', bold: true do
             column "#{repo}"
-            column "#{data['pr_count']}"
-            column "#{data['issue_count']}"
-            column "#{data['watcher_count']}"
-            column "#{data['fork_count']}"
+            column "#{prs.count}"
+            column "#{issues.count}"
           end
         end
 
+        all_issues, all_prs = repo_issues_and_prs
         puts 'Totals:'
-        puts "Repos: #{repos.count}"
-        puts 'Pull requests: na'
-        puts 'Issues: na'
-        puts "Watchers: na\n"
+        puts "Repos: #{LetsGetBetter::Github.repos.count}"
+        puts "Pull requests: #{all_prs.count}"
+        puts "Issues: #{all_issues.count}"
       end
     end
   end

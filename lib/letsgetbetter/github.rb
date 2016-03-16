@@ -19,23 +19,29 @@
 module LetsGetBetter
   # Fetches the Github org state
   class Github
-    # return a hash of the repos with details for each
-    def self.repos_details
-      if @repo_details
-        @repo_details
-      else
-        @repo_details = {}
-        repos.each do |repo|
-          details = {}
-          repo_data = gh_connection.repository("#{Config.config['options']['org']}/#{repo}")
-          details['watcher_count'] = repo_data[:watchers_count]
-          details['fork_count'] = repo_data[:forks_count]
-          details['pr_count'] = 0
-          details['issue_count'] = 0
-          @repo_details[repo] = details
+    # return array of issues
+    def self.issues
+      unless @all_issues
+        all_data = gh_connection.org_issues(Config.config['options']['org'], filter: 'all')
+        @all_issues = {}
+        all_data.each do |issue|
+          next unless issue['state'] == 'open'
+          temp = {}
+          temp['created_at'] = issue['created_at']
+          temp['updated_at'] = issue['updated_at']
+          temp['repository'] = issue['repository']['name']
+          temp['comments'] = issue['comments']
+          temp['number'] = issue['number']
+          temp['is_pr'] =  issue['pull_request'] ? true : false
+          @all_issues["#{issue['id']}"] = temp
         end
-        @repo_details
       end
+      @all_issues
+    end
+
+    # return an array of the repos
+    def self.repos
+      @repos ||= gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public').collect { |x| x[:name] }
     end
 
     private
@@ -47,11 +53,6 @@ module LetsGetBetter
         @connection.auto_paginate = true
       end
       @connection
-    end
-
-    # return an array of the repos
-    def self.repos
-      @repos ||= gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public').collect { |x| x[:name] }
     end
   end
 end
