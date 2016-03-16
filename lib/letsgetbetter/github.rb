@@ -49,8 +49,16 @@ module LetsGetBetter
     # return the connection or set a new one up
     def self.gh_connection
       unless @connection
+        faraday = Faraday::RackBuilder.new do |builder|
+          builder.use Faraday::HttpCache
+          builder.use Octokit::Response::RaiseError
+          builder.adapter Faraday.default_adapter
+        end
+
         @connection = Octokit::Client.new(access_token: Config.config['config']['github']['token'])
         @connection.auto_paginate = true
+        @connection.middleware = faraday
+
       end
       @connection
     end

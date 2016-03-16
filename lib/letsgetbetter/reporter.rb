@@ -38,14 +38,14 @@ module LetsGetBetter
     end
 
     def run
-      header title: "#{Config.config['options']['org']} Github Organization Report", width: 70, align: 'center', rule: true, color: 'green', bold: true
+      header title: "#{Config.config['options']['org']} Github Organization Report", width: 80, align: 'center', rule: true, color: 'green', bold: true
       table border: true do
         row header: true, color: 'red' do
           column 'Repo Name', width: 40, align: 'center', color: 'blue'
           column 'Open PRs', width: 10
           column 'Issues', width: 10
           column 'Oldest PR', width: 10
-          column 'Newest PR', width: 10
+          column 'Oldest Issue', width: 10
         end
 
         LetsGetBetter::Github.repos.each do |repo|

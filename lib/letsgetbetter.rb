@@ -24,6 +24,7 @@ module LetsGetBetter
   require 'letsgetbetter/reporter.rb'
   require 'yaml'
   require 'octokit'
+  require 'faraday-http-cache'
 
   include LetsGetBetter::Config
 
