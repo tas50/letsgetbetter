@@ -23,18 +23,40 @@ module LetsGetBetter
 
     # return array of issues and array of PRs for the passed repo
     def repo_issues_and_prs(repo = nil)
-      issues = []
-      prs = []
+      issue_ar = []
+      pr_ar = []
       LetsGetBetter::Github.issues.each do |_id, issue_data|
         next unless issue_data['repository'] == repo || repo.nil?
         # sort based on the identified type
         if issue_data['is_pr']
-          prs << issue_data
+          pr_ar << issue_data
         else
-          issues << issue_data
+          issue_ar << issue_data
         end
       end
-      [issues, prs]
+      [issue_ar, pr_ar]
+    end
+
+    def oldest_issues_and_prs(repo = nil)
+      oldest_issue_time = Time.new
+      oldest_issue = {}
+      oldest_pr_time = Time.new
+      oldest_pr = {}
+
+      repo_issues_and_prs(repo)[0].each do |issue|
+        if issue['created_at'] < oldest_issue_time
+          oldest_issue_time = issue['created_at']
+          oldest_issue = issue
+        end
+      end
+
+      repo_issues_and_prs(repo)[1].each do |issue|
+        if issue['created_at'] < oldest_pr_time
+          oldest_pr_time = issue['created_at']
+          oldest_pr = issue
+        end
+      end
+      [oldest_issue, oldest_pr]
     end
 
     def run
@@ -50,11 +72,14 @@ module LetsGetBetter
 
         LetsGetBetter::Github.repos.each do |repo|
           issues, prs = repo_issues_and_prs(repo)
+          old_ones = oldest_issues_and_prs(repo)
 
           row color: 'green', bold: true do
             column "#{repo}"
             column "#{prs.count}"
             column "#{issues.count}"
+            column "#{old_ones[1]['created_at']}"
+            column "#{old_ones[0]['created_at']}"
           end
         end
 
