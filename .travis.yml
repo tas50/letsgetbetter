@@ -5,8 +5,8 @@ cache:
 install:
   - bundle install
 rvm:
-- 2.1
-- 2.2
-- 2.3
+- 2.1.9
+- 2.2.5
+- 2.3.1
 script:
   - bundle exec rake test
