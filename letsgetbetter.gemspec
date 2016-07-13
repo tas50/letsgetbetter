@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'octokit', '~> 4.0'
   s.add_dependency 'command_line_reporter'
   s.add_dependency 'faraday-http-cache'
-  s.add_development_dependency 'rake', '< 11'
-  s.add_development_dependency 'rubocop', '~> 0.38'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rubocop', '~> 0.40'
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.name
