@@ -44,7 +44,7 @@ module LetsGetBetter
       @repos ||= gh_connection.org_repos(Config.config['options']['org'], type: Config.config['options']['repo_types'] || 'public').collect { |x| x[:name] }
     end
 
-    private
+    private_class_method
 
     # return the connection or set a new one up
     def self.gh_connection

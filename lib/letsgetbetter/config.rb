@@ -24,7 +24,7 @@ module LetsGetBetter
       @config ||= load_config
     end
 
-    private
+    private_class_method
 
     def self.load_config
       merged_config = {}
