@@ -37,7 +37,7 @@ module LetsGetBetter
     elsif ARGV[-1] == 'slack'
       LetsGetBetter::Slack.post
     else
-      puts "You must pass either report or slack actions. run letsgetbetter -h for usage"
+      puts 'You must pass either report or slack actions. run letsgetbetter -h for usage'
     end
   end
 end
