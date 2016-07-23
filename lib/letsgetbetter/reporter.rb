@@ -38,12 +38,14 @@ module LetsGetBetter
     end
 
     def oldest_issues_and_prs(repo = nil)
+      repos = LetsGetBetter::Github.repos
       oldest_issue_time = Time.new
       oldest_issue = {}
       oldest_pr_time = Time.new
       oldest_pr = {}
 
       repo_issues_and_prs(repo)[0].each do |issue|
+        next unless repos.include?(issue['repository'])
         if issue['created_at'] < oldest_issue_time
           oldest_issue_time = issue['created_at']
           oldest_issue = issue

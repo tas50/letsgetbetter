@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'octokit', '~> 4.0'
   s.add_dependency 'command_line_reporter'
   s.add_dependency 'faraday-http-cache'
+  s.add_dependency 'slack-post'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubocop', '~> 0.40'
 

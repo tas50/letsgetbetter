@@ -22,14 +22,22 @@ module LetsGetBetter
   require 'letsgetbetter/config.rb'
   require 'letsgetbetter/github.rb'
   require 'letsgetbetter/reporter.rb'
+  require 'letsgetbetter/slack.rb'
   require 'yaml'
   require 'octokit'
   require 'faraday-http-cache'
+  require 'pry'
 
   include LetsGetBetter::Config
 
   # main method used to kick off the run
   def self::run
-    Reporter.new.run
+    if ARGV[-1] == 'report'
+      Reporter.new.run
+    elsif ARGV[-1] == 'slack'
+      LetsGetBetter::Slack.post
+    else
+      puts "You must pass either report or slack actions. run letsgetbetter -h for usage"
+    end
   end
 end
