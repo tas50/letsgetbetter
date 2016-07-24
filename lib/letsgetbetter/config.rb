@@ -63,14 +63,13 @@ module LetsGetBetter
         end
       end
 
+      optparse.parse!
+
       # make sure the org val is passed
       if options['org'].nil?
-        puts "\e[31mYou must pass an organization to poll!\e[0m\n\n"
         puts optparse
         exit!
       end
-
-      optparse.parse!
 
       options
     end
