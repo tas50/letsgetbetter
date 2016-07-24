@@ -32,12 +32,12 @@ module LetsGetBetter
 
   # main method used to kick off the run
   def self::run
-    if ARGV[-1] == 'report'
+    if ARGV[0] == 'report'
       Reporter.new.run
-    elsif ARGV[-1] == 'slack'
+    elsif ARGV[0] == 'slack'
       LetsGetBetter::Slack.post
     else
-      puts 'You must pass either report or slack actions. run letsgetbetter -h for usage'
+      puts "\e[31mYou must pass either report or slack actions. run letsgetbetter -h for usage\e[0m"
     end
   end
 end
