@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'slack-post'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rubocop', '~> 0.40'
+  s.add_development_dependency 'pry'
 
   s.files         = `git ls-files -z`.split("\x0")
   s.executables   = s.name
