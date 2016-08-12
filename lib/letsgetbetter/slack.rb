@@ -23,8 +23,8 @@ module LetsGetBetter
 
       ::Slack::Post.configure(
         webhook_url: Config.config['config']['slack']['webhook_url'],
-        username: 'LetsGetBetter',
-        icon_url: 'https://www.chef.io/favicon-bc338548.png'
+        username: Config.config['config']['slack']['username'] || 'LetsGetBetter',
+        icon_url: Config.config['config']['slack']['favicon'] ||
       )
       # binding.pry
       ::Slack::Post.post message
