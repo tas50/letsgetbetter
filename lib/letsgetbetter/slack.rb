@@ -24,7 +24,7 @@ module LetsGetBetter
       ::Slack::Post.configure(
         webhook_url: Config.config['config']['slack']['webhook_url'],
         username: Config.config['config']['slack']['username'] || 'LetsGetBetter',
-        icon_url: Config.config['config']['slack']['favicon'] ||
+        icon_url: Config.config['config']['slack']['favicon']
       )
       # binding.pry
       ::Slack::Post.post message
